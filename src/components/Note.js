@@ -42,22 +42,28 @@ const Note = (props) => {
                                 onChange={(e) => setEditedContent(e.target.value)}
                                 style={{ backgroundColor }}
                             />
-                            <button className="btn save-btn" onClick={handleSave}>Save</button>
-                            <input
-                                className="color-input"
-                                type="color"
-                                value={backgroundColor}
-                                onChange={(e) => handleColorChange(e.target.value)}
-                            />
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <button className="btn save-btn" onClick={handleSave}>Save</button>
+                                <input
+                                    className="color-input"
+                                    type="color"
+                                    value={backgroundColor}
+                                    onChange={(e) => handleColorChange(e.target.value)}
+                                    style={{ width: "25px" }}
+                                />
+                            </div>
+
                         </div>
                     ) : (
                         <div>
                             <h1>{props.title}</h1>
                             <p>{props.content}</p>
-                            <button className="btn edit-btn" onClick={handleEdit}>Edit</button>
-                            <button className="btn" onClick={deleteNote}>
-                                <DeleteOutlineIcon className="deleteIcon" />
-                            </button>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <button className="btn edit-btn" onClick={handleEdit}>Edit</button>
+                                <button className="btn" onClick={deleteNote}>
+                                    <DeleteOutlineIcon className="deleteIcon" />
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
