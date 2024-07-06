@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import Draggable from 'react-draggable'; // Import Draggable component
+import Draggable from 'react-draggable';
 import "./styles.css";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const Note = (props) => {
     const [editMode, setEditMode] = useState(false);
@@ -44,13 +45,15 @@ const Note = (props) => {
                             />
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
                                 <button className="btn save-btn" onClick={handleSave}>Save</button>
-                                <input
-                                    className="color-input"
-                                    type="color"
-                                    value={backgroundColor}
-                                    onChange={(e) => handleColorChange(e.target.value)}
-                                    style={{ width: "25px" }}
-                                />
+                                <Tooltip title="Pick a background color" arrow>
+                                    <input
+                                        className="color-input"
+                                        type="color"
+                                        value={backgroundColor}
+                                        onChange={(e) => handleColorChange(e.target.value)}
+                                        style={{ width: "25px" }}
+                                    />
+                                </Tooltip>
                             </div>
                         </div>
                     ) : (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import "./styles.css";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const CreateNote = (props) => {
     const [expand, setExpand] = useState(false);
@@ -68,16 +69,20 @@ const CreateNote = (props) => {
                 ></textarea>
                 {expand && (
                     <div className="note-controls">
-                        <input
-                            type="color"
-                            value={note.backgroundColor}
-                            onChange={handleColorChange}
-                            className="color-picker"
-                            style={{ width: "25px" }}
-                        />
-                        <Button onClick={addEvent}>
-                            <AddIcon className="plus_sign" />
-                        </Button>
+                        <Tooltip title="Pick a background color" arrow>
+                            <input
+                                type="color"
+                                value={note.backgroundColor}
+                                onChange={handleColorChange}
+                                className="color-picker"
+                                style={{ width: "25px" }}
+                            />
+                        </Tooltip>
+                        <Tooltip title="Create note" arrow>
+                            <Button onClick={addEvent}>
+                                <AddIcon className="plus_sign" />
+                            </Button>
+                        </Tooltip>
                     </div>
                 )}
             </form>
