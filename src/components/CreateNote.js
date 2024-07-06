@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import "./styles.css";
-import ColorLensIcon from '@material-ui/icons/ColorLens'; // Import ColorLensIcon from Material-UI
-
 
 const CreateNote = (props) => {
     const [expand, setExpand] = useState(false);
     const [note, setNote] = useState({
         title: "",
         content: "",
-        backgroundColor: "#fff" // Initial background color
+        backgroundColor: "#fff"
     });
 
     const InputEvent = (event) => {
@@ -38,16 +36,17 @@ const CreateNote = (props) => {
         setExpand(false);
     };
 
-    const handleColorChange = (color) => {
+    const handleColorChange = (event) => {
+        const newColor = event.target.value;
         setNote((prevData) => ({
             ...prevData,
-            backgroundColor: color
+            backgroundColor: newColor,
         }));
     };
 
     return (
         <div className='main_note' onDoubleClick={bToNormal}>
-            <form>
+            <form style={{ backgroundColor: note.backgroundColor }} >
                 {expand &&
                     <input
                         type='text'
@@ -68,15 +67,23 @@ const CreateNote = (props) => {
                     onClick={expandIt}
                     style={{ backgroundColor: note.backgroundColor }}
                 ></textarea>
-                {expand &&
-                    <Button onClick={addEvent}>
-                        <AddIcon className="plus_sign" />
-                    </Button>
-                }
+                {expand && (
+                    <div className="note-controls">
+                        <input
+                            type="color"
+                            value={note.backgroundColor}
+                            onChange={handleColorChange}
+                            className="color-picker"
+                            style={{ width: "25px" }}
+                        />
+                        <Button onClick={addEvent}>
+                            <AddIcon className="plus_sign" />
+                        </Button>
+                    </div>
+                )}
             </form>
         </div>
     );
 };
-
 
 export default CreateNote;

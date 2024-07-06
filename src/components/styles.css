@@ -155,3 +155,14 @@ textarea {
 .note .save-btn:hover {
   background-color: #f4a400;
 }
+
+.note-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px; /* Optional: Adjust the spacing as needed */
+}
+
+.color-picker {
+  cursor: pointer;
+}
