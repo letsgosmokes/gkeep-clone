@@ -5,6 +5,7 @@ import "./styles.css";
 import Tooltip from '@material-ui/core/Tooltip';
 
 const Note = (props) => {
+    console.log(props.isCheckbox)
     const [editMode, setEditMode] = useState(false);
     const [editedTitle, setEditedTitle] = useState(props.title);
     const [editedContent, setEditedContent] = useState(props.content);
@@ -69,11 +70,13 @@ const Note = (props) => {
                                 value={editedTitle}
                                 onChange={(e) => setEditedTitle(e.target.value)}
                             />
+                            {!props.isCheckbox ?
                             <textarea
                                 value={editedContent}
                                 onChange={(e) => setEditedContent(e.target.value)}
                                 style={{ backgroundColor }}
                             />
+                            :
                             <div>
                                 {editedChecklist.map((item, index) => (
                                     <div key={index} style={{ display: "flex", alignItems: "center" }}>
@@ -98,6 +101,7 @@ const Note = (props) => {
                                     </div>
                                 ))}
                             </div>
+                            }
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
                                 <button className="btn save-btn" onClick={handleSave}>Save</button>
                                 <Tooltip title="Pick a background color" arrow>
