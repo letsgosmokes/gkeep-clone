@@ -5,7 +5,6 @@ import "./styles.css";
 import Tooltip from '@material-ui/core/Tooltip';
 
 const Note = (props) => {
-    console.log(props.isCheckbox)
     const [editMode, setEditMode] = useState(false);
     const [editedTitle, setEditedTitle] = useState(props.title);
     const [editedContent, setEditedContent] = useState(props.content);

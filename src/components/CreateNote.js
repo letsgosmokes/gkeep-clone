@@ -162,7 +162,7 @@ const CreateNote = (props) => {
                             />
                         </Tooltip>
                         <Tooltip title={note.isCheckbox ? "Switch to text" : "Switch to checkbox"} arrow>
-                            <button type="button" onClick={toggleInputType}>
+                            <button style={{ padding: "5px", background: note.backgroundColor, borderRadius: "5px", cursor: "pointer" }} type="button" onClick={toggleInputType}>
                                 {note.isCheckbox ? "Switch to text" : "Switch to checkbox"}
                             </button>
                         </Tooltip>
