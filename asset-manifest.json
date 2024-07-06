@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/gkeep-clone/static/css/main.5a72ca44.css",
+    "main.js": "/gkeep-clone/static/js/main.3a6429cc.js",
+    "index.html": "/gkeep-clone/index.html",
+    "main.5a72ca44.css.map": "/gkeep-clone/static/css/main.5a72ca44.css.map",
+    "main.3a6429cc.js.map": "/gkeep-clone/static/js/main.3a6429cc.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a72ca44.css",
+    "static/js/main.3a6429cc.js"
+  ]
+}
