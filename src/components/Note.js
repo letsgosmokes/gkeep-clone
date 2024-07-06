@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import Draggable from 'react-draggable';
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import Draggable from "react-draggable";
 import "./styles.css";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 
 const Note = (props) => {
     const [editMode, setEditMode] = useState(false);
@@ -22,7 +22,12 @@ const Note = (props) => {
     };
 
     const handleSave = () => {
-        props.editItem(props.id, editedTitle, editedContent, backgroundColor, editedChecklist);
+        props.editItem(
+            editedTitle,
+            editedContent,
+            backgroundColor,
+            editedChecklist
+        );
         setEditMode(false);
     };
 
@@ -40,22 +45,27 @@ const Note = (props) => {
         const newChecklist = [...editedChecklist];
         // Toggle the checked state
         newChecklist[index].checked = !newChecklist[index].checked;
-        
+
         // If checked, move the item to the end of the array
         if (newChecklist[index].checked) {
             const checkedItem = newChecklist.splice(index, 1)[0];
             newChecklist.push(checkedItem);
         }
-    
+
         setEditedChecklist(newChecklist);
     };
-    
 
-    const moveCheckedToEnd = () => {
-        const uncheckedItems = editedChecklist.filter(item => !item.checked);
-        const checkedItems = editedChecklist.filter(item => item.checked);
-        const reorderedChecklist = [...uncheckedItems, ...checkedItems];
-        setEditedChecklist(reorderedChecklist);
+    const handleKeyPress = (event, index) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addChecklistItem(index + 1); // Add new item after the current item
+        }
+    };
+
+    const addChecklistItem = (index) => {
+        const newChecklist = [...editedChecklist];
+        newChecklist.splice(index, 0, { text: "", checked: false });
+        setEditedChecklist(newChecklist);
     };
 
     return (
@@ -70,39 +80,45 @@ const Note = (props) => {
                                 onChange={(e) => setEditedTitle(e.target.value)}
                             />
                             {!props.isCheckbox ?
-                            <textarea
-                                value={editedContent}
-                                onChange={(e) => setEditedContent(e.target.value)}
-                                style={{ backgroundColor }}
-                            />
-                            :
-                            <div>
-                                {editedChecklist.map((item, index) => (
-                                    <div key={index} style={{ display: "flex", alignItems: "center" }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={item.checked}
-                                            onChange={() => handleCheckboxChange(index)}
-                                            style={{ width: "25px" }}
-                                        />
-                                        <input
-                                            type="text"
-                                            value={item.text}
-                                            onChange={(e) => handleChecklistChange(index, e)}
-                                            onBlur={moveCheckedToEnd}
-                                            placeholder={`Item ${index + 1}`}
-                                            style={{
-                                                marginLeft: "8px",
-                                                fontWeight: "normal",
-                                                textDecoration: item.checked ? "line-through" : "none"
-                                            }}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                            }
+                                <textarea
+                                    value={editedContent}
+                                    onChange={(e) => setEditedContent(e.target.value)}
+                                    style={{ backgroundColor }}
+                                />
+                                :
+                                <div>
+                                    {editedChecklist.map((item, index) => (
+                                        <div
+                                            key={index}
+                                            style={{ display: "flex", alignItems: "center" }}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={item.checked}
+                                                onChange={() => handleCheckboxChange(index)}
+                                                style={{ width: "25px" }}
+                                            />
+                                            <input
+                                                type="text"
+                                                value={item.text}
+                                                onChange={(e) => handleChecklistChange(index, e)}
+                                                onKeyPress={(e) => handleKeyPress(e, index)}
+                                                placeholder={`Item ${index + 1}`}
+                                                style={{
+                                                    marginLeft: "8px",
+                                                    fontWeight: "normal",
+                                                    textDecoration: item.checked
+                                                        ? "line-through"
+                                                        : "none",
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>}
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <button className="btn save-btn" onClick={handleSave}>Save</button>
+                                <button className="btn save-btn" onClick={handleSave}>
+                                    Save
+                                </button>
                                 <Tooltip title="Pick a background color" arrow>
                                     <input
                                         className="color-input"
@@ -120,23 +136,34 @@ const Note = (props) => {
                             <p>{props.content}</p>
                             <div>
                                 {props.checklist.map((item, index) => (
-                                    <div key={index} style={{ display: "flex", alignItems: "center" }}>
+                                    <div
+                                        key={index}
+                                        style={{ display: "flex", alignItems: "center" }}
+                                    >
                                         <input
                                             type="checkbox"
                                             checked={item.checked}
                                             readOnly
                                             style={{ width: "20px" }}
                                         />
-                                        <p style={{
-                                            marginLeft: "8px",
-                                            textDecoration: item.checked ? "line-through" : "none",
-                                            fontWeight: "normal"
-                                        }}>{item.text}</p>
+                                        <p
+                                            style={{
+                                                marginLeft: "8px",
+                                                textDecoration: item.checked
+                                                    ? "line-through"
+                                                    : "none",
+                                                fontWeight: "normal",
+                                            }}
+                                        >
+                                            {item.text}
+                                        </p>
                                     </div>
                                 ))}
                             </div>
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <button className="btn edit-btn" onClick={handleEdit}>Edit</button>
+                                <button className="btn edit-btn" onClick={handleEdit}>
+                                    Edit
+                                </button>
                                 <button className="btn delete-btn" onClick={deleteNote}>
                                     <DeleteOutlineIcon />
                                 </button>
