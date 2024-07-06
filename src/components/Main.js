@@ -5,39 +5,45 @@ import Note from "./Note";
 import "./styles.css";
 
 const Main = () => {
+    const [addItem, setAddItem] = useState([]);
 
-  const [addItem, setAddItem] = useState([]);
+    const addNote = (note) => {
+        setAddItem((prevData) => [...prevData, note]);
+    };
 
-  const addNote = (note) => {
-    setAddItem((prevData) => {
-      return [...prevData, note];
-    })
-  };
-
-  const onDelete = (id) => {
-    setAddItem((olddata) =>
-      olddata.filter((currdata, indx) => {
-        return indx !== id;
-      })
-    );
-  };
-
-  return (
-    <>
-      <Header />
-      <CreateNote passNote={addNote} />
-      {addItem.map((val, index) => {
-        return (<Note
-          key={index}
-          id={index}
-          title={val.title}
-          content={val.content}
-          deleteItem={onDelete}
-        />
+    const deleteNote = (id) => {
+        setAddItem((prevData) =>
+            prevData.filter((note, index) => index !== id)
         );
-      })}
-    </>
-  );
+    };
+
+    const editNote = (id, editedTitle, editedContent) => {
+        setAddItem((prevData) =>
+            prevData.map((note, index) => {
+                if (index === id) {
+                    return { ...note, title: editedTitle, content: editedContent };
+                }
+                return note;
+            })
+        );
+    };
+
+    return (
+        <>
+            <Header />
+            <CreateNote passNote={addNote} />
+            {addItem.map((val, index) => (
+                <Note
+                    key={index}
+                    id={index}
+                    title={val.title}
+                    content={val.content}
+                    deleteItem={deleteNote}
+                    editItem={editNote}
+                />
+            ))}
+        </>
+    );
 };
 
 export default Main;
