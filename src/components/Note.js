@@ -7,7 +7,7 @@ const Note = (props) => {
     const [editMode, setEditMode] = useState(false);
     const [editedTitle, setEditedTitle] = useState(props.title);
     const [editedContent, setEditedContent] = useState(props.content);
-    const [backgroundColor, setBackgroundColor] = useState("#fff"); // Initial background color
+    const [backgroundColor, setBackgroundColor] = useState(props.backgroundColor); // Use prop background color
 
     const deleteNote = () => {
         props.deleteItem(props.id);
@@ -18,7 +18,7 @@ const Note = (props) => {
     };
 
     const handleSave = () => {
-        props.editItem(props.id, editedTitle, editedContent);
+        props.editItem(props.id, editedTitle, editedContent, backgroundColor);
         setEditMode(false);
     };
 
@@ -52,7 +52,6 @@ const Note = (props) => {
                                     style={{ width: "25px" }}
                                 />
                             </div>
-
                         </div>
                     ) : (
                         <div>

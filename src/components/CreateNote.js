@@ -46,7 +46,7 @@ const CreateNote = (props) => {
 
     return (
         <div className='main_note' onDoubleClick={bToNormal}>
-            <form style={{ backgroundColor: note.backgroundColor }} >
+            <form style={{ backgroundColor: note.backgroundColor }}>
                 {expand &&
                     <input
                         type='text'
@@ -65,7 +65,6 @@ const CreateNote = (props) => {
                     onChange={InputEvent}
                     placeholder="Write a note..."
                     onClick={expandIt}
-                    style={{ backgroundColor: note.backgroundColor }}
                 ></textarea>
                 {expand && (
                     <div className="note-controls">
