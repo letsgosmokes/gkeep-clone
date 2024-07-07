@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Draggable from "react-draggable";
 import "./styles.css";
@@ -10,6 +10,10 @@ const Note = (props) => {
     const [editedContent, setEditedContent] = useState(props.content);
     const [backgroundColor, setBackgroundColor] = useState(props.backgroundColor);
     const [editedChecklist, setEditedChecklist] = useState([...props.checklist]);
+
+    useEffect(() => {
+        reorderChecklist();
+    }, [editedChecklist]);
 
     const deleteNote = () => {
         props.deleteItem(props.id);
@@ -43,13 +47,14 @@ const Note = (props) => {
 
     const handleCheckboxChange = (index) => {
         const newChecklist = [...editedChecklist];
-        // Toggle the checked state
         newChecklist[index].checked = !newChecklist[index].checked;
 
-        // If checked, move the item to the end of the array
-        if (newChecklist[index].checked) {
-            const checkedItem = newChecklist.splice(index, 1)[0];
-            newChecklist.push(checkedItem);
+        // Move checked items to the end and unchecked items to the top
+        const item = newChecklist.splice(index, 1)[0];
+        if (item.checked) {
+            newChecklist.push(item);
+        } else {
+            newChecklist.unshift(item);
         }
 
         setEditedChecklist(newChecklist);
@@ -66,6 +71,14 @@ const Note = (props) => {
         const newChecklist = [...editedChecklist];
         newChecklist.splice(index, 0, { text: "", checked: false });
         setEditedChecklist(newChecklist);
+    };
+
+    const reorderChecklist = () => {
+        const newChecklist = [...editedChecklist];
+        // Move checked items to the end and unchecked items to the top
+        const checkedItems = newChecklist.filter(item => item.checked);
+        const uncheckedItems = newChecklist.filter(item => !item.checked);
+        setEditedChecklist([...uncheckedItems, ...checkedItems]);
     };
 
     return (
@@ -103,13 +116,14 @@ const Note = (props) => {
                                                 value={item.text}
                                                 onChange={(e) => handleChecklistChange(index, e)}
                                                 onKeyPress={(e) => handleKeyPress(e, index)}
-                                                placeholder={`Item ${index + 1}`}
+                                                placeholder="Add item..."
                                                 style={{
                                                     marginLeft: "8px",
                                                     fontWeight: "normal",
                                                     textDecoration: item.checked
                                                         ? "line-through"
                                                         : "none",
+                                                    fontSize: "14px"
                                                 }}
                                             />
                                         </div>
