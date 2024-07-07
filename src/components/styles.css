@@ -9,7 +9,7 @@
 .header {
   width: 100%;
   line-height: 100px;
-  background-color: #f5ba13;
+  background-color: orange;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -135,7 +135,7 @@ textarea {
 }
 
 .note .btn:hover {
-  background-color: #f5ba13;
+  background-color: orange;
 }
 
 .note .btn:hover .deleteIcon {
@@ -143,7 +143,7 @@ textarea {
 }
 
 .note .save-btn {
-  background-color: #f5ba13;
+  background-color: orange;
   color: white;
   border: none;
   margin-top: 5px;
@@ -154,7 +154,7 @@ textarea {
 }
 
 .note .save-btn:hover {
-  background-color: #f4a400;
+  background-color: orange;
 }
 
 .note-controls {
@@ -178,6 +178,6 @@ textarea {
 }
 
 .toggle-btn:hover {
-  background-color: #f5ba13;
+  background-color: orange;
   color: white;
 }
