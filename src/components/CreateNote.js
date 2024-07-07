@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -9,14 +9,10 @@ const CreateNote = (props) => {
     const [note, setNote] = useState({
         title: "",
         content: "",
-        backgroundColor: "#fff",
+        backgroundColor: "#ffffff",
         isCheckbox: false,
         checklist: []
     });
-
-    useEffect(() => {
-        reorderChecklist();
-    }, [note.checklist.length, note.checklist]);
 
     const InputEvent = (event) => {
         const { name, value } = event.target;
@@ -33,7 +29,7 @@ const CreateNote = (props) => {
         setNote({
             title: "",
             content: "",
-            backgroundColor: "#fff",
+            backgroundColor: "#ffffff",
             isCheckbox: false,
             checklist: []
         });
@@ -74,12 +70,8 @@ const CreateNote = (props) => {
 
     const handleCheckboxChange = (index) => {
         const newChecklist = [...note.checklist];
-        // Toggle the checked state
         newChecklist[index].checked = !newChecklist[index].checked;
-        setNote((prevData) => ({
-            ...prevData,
-            checklist: newChecklist
-        }));
+        reorderChecklist(newChecklist);
     };
 
     const addChecklistItem = () => {
@@ -96,9 +88,8 @@ const CreateNote = (props) => {
         }
     };
 
-    const reorderChecklist = () => {
-        const newChecklist = [...note.checklist];
-        // Move checked items to the end of the array
+    const reorderChecklist = (checklist) => {
+        const newChecklist = [...checklist];
         const checkedItems = newChecklist.filter(item => item.checked);
         const uncheckedItems = newChecklist.filter(item => !item.checked);
         setNote((prevData) => ({

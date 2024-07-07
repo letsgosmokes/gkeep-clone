@@ -12,8 +12,10 @@ const Note = (props) => {
     const [editedChecklist, setEditedChecklist] = useState([...props.checklist]);
 
     useEffect(() => {
-        reorderChecklist();
-    }, [editedChecklist]);
+        if (editMode) {
+            reorderChecklist();
+        }
+    }, [editMode]);
 
     const deleteNote = () => {
         props.deleteItem(props.id);
@@ -21,12 +23,13 @@ const Note = (props) => {
 
     const handleEdit = () => {
         setEditMode(true);
-        // Initialize edited checklist with current props
         setEditedChecklist([...props.checklist]);
     };
 
-    const handleSave = () => {
+    const handleSave = (event) => {
+        event.preventDefault();
         props.editItem(
+            props.id, // Pass the note id for identification
             editedTitle,
             editedContent,
             backgroundColor,
@@ -49,7 +52,6 @@ const Note = (props) => {
         const newChecklist = [...editedChecklist];
         newChecklist[index].checked = !newChecklist[index].checked;
 
-        // Move checked items to the end and unchecked items to the top
         const item = newChecklist.splice(index, 1)[0];
         if (item.checked) {
             newChecklist.push(item);
@@ -63,7 +65,7 @@ const Note = (props) => {
     const handleKeyPress = (event, index) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            addChecklistItem(index + 1); // Add new item after the current item
+            addChecklistItem(index + 1);
         }
     };
 
@@ -75,7 +77,6 @@ const Note = (props) => {
 
     const reorderChecklist = () => {
         const newChecklist = [...editedChecklist];
-        // Move checked items to the end and unchecked items to the top
         const checkedItems = newChecklist.filter(item => item.checked);
         const uncheckedItems = newChecklist.filter(item => !item.checked);
         setEditedChecklist([...uncheckedItems, ...checkedItems]);
@@ -84,7 +85,7 @@ const Note = (props) => {
     return (
         <Draggable>
             <div>
-                <div className="note" style={{ backgroundColor }}>
+                <form className="note" style={{ backgroundColor }} onSubmit={handleSave}>
                     {editMode ? (
                         <div>
                             <input
@@ -92,13 +93,13 @@ const Note = (props) => {
                                 value={editedTitle}
                                 onChange={(e) => setEditedTitle(e.target.value)}
                             />
-                            {!props.isCheckbox ?
+                            {!props.isCheckbox ? (
                                 <textarea
                                     value={editedContent}
                                     onChange={(e) => setEditedContent(e.target.value)}
                                     style={{ backgroundColor }}
                                 />
-                                :
+                            ) : (
                                 <div>
                                     {editedChecklist.map((item, index) => (
                                         <div
@@ -128,9 +129,10 @@ const Note = (props) => {
                                             />
                                         </div>
                                     ))}
-                                </div>}
+                                </div>
+                            )}
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <button className="btn save-btn" onClick={handleSave}>
+                                <button className="btn save-btn" type="submit">
                                     Save
                                 </button>
                                 <Tooltip title="Pick a background color" arrow>
@@ -184,7 +186,7 @@ const Note = (props) => {
                             </div>
                         </div>
                     )}
-                </div>
+                </form>
             </div>
         </Draggable>
     );
