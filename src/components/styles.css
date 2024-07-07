@@ -3,12 +3,13 @@
   padding: 0;
   margin: 0;
   font-family: "Inter";
+  color: black;
 }
 
 .header {
   width: 100%;
   line-height: 100px;
-  background-color: #f5ba13;
+  background-color: orange;
   display: flex;
   justify-content: start;
   align-items: center;
@@ -68,7 +69,7 @@ textarea {
   bottom: -28px;
   left: 400px;
   cursor: pointer;
-  background-color: #fff !important;
+  background-color: white !important;
   box-shadow: 5px 5px 15px -15px rgba(0, 0, 0, 0.3);
   border-radius: 50% !important;
 }
@@ -87,12 +88,12 @@ textarea {
 }
 
 .Mui-Button-root:hover .plus_sign {
-  color: #fff;
+  color: white;
   background: transparent;
 }
 
 .note {
-  background: #fff;
+  background: white;
   border-radius: 7px;
   box-shadow: 0 2px 5px #ccc;
   padding: 10px;
@@ -134,15 +135,15 @@ textarea {
 }
 
 .note .btn:hover {
-  background-color: #f5ba13;
+  background-color: orange;
 }
 
 .note .btn:hover .deleteIcon {
-  color: #fff;
+  color: white;
 }
 
 .note .save-btn {
-  background-color: #f5ba13;
+  background-color: orange;
   color: white;
   border: none;
   margin-top: 5px;
@@ -153,7 +154,7 @@ textarea {
 }
 
 .note .save-btn:hover {
-  background-color: #f4a400;
+  background-color: orange;
 }
 
 .note-controls {
@@ -177,6 +178,6 @@ textarea {
 }
 
 .toggle-btn:hover {
-  background-color: #f5ba13;
+  background-color: orange;
   color: white;
 }

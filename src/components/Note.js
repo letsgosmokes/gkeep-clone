@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import Draggable from "react-draggable";
 import "./styles.css";
@@ -11,18 +11,25 @@ const Note = (props) => {
     const [backgroundColor, setBackgroundColor] = useState(props.backgroundColor);
     const [editedChecklist, setEditedChecklist] = useState([...props.checklist]);
 
+    useEffect(() => {
+        if (editMode) {
+            reorderChecklist();
+        }
+    }, [editMode]);
+
     const deleteNote = () => {
         props.deleteItem(props.id);
     };
 
     const handleEdit = () => {
         setEditMode(true);
-        // Initialize edited checklist with current props
         setEditedChecklist([...props.checklist]);
     };
 
-    const handleSave = () => {
+    const handleSave = (event) => {
+        event.preventDefault();
         props.editItem(
+            props.id, // Pass the note id for identification
             editedTitle,
             editedContent,
             backgroundColor,
@@ -43,13 +50,13 @@ const Note = (props) => {
 
     const handleCheckboxChange = (index) => {
         const newChecklist = [...editedChecklist];
-        // Toggle the checked state
         newChecklist[index].checked = !newChecklist[index].checked;
 
-        // If checked, move the item to the end of the array
-        if (newChecklist[index].checked) {
-            const checkedItem = newChecklist.splice(index, 1)[0];
-            newChecklist.push(checkedItem);
+        const item = newChecklist.splice(index, 1)[0];
+        if (item.checked) {
+            newChecklist.push(item);
+        } else {
+            newChecklist.unshift(item);
         }
 
         setEditedChecklist(newChecklist);
@@ -58,7 +65,7 @@ const Note = (props) => {
     const handleKeyPress = (event, index) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            addChecklistItem(index + 1); // Add new item after the current item
+            addChecklistItem(index + 1);
         }
     };
 
@@ -68,10 +75,17 @@ const Note = (props) => {
         setEditedChecklist(newChecklist);
     };
 
+    const reorderChecklist = () => {
+        const newChecklist = [...editedChecklist];
+        const checkedItems = newChecklist.filter(item => item.checked);
+        const uncheckedItems = newChecklist.filter(item => !item.checked);
+        setEditedChecklist([...uncheckedItems, ...checkedItems]);
+    };
+
     return (
         <Draggable>
             <div>
-                <div className="note" style={{ backgroundColor }}>
+                <form className="note" style={{ backgroundColor }} onSubmit={handleSave}>
                     {editMode ? (
                         <div>
                             <input
@@ -79,13 +93,13 @@ const Note = (props) => {
                                 value={editedTitle}
                                 onChange={(e) => setEditedTitle(e.target.value)}
                             />
-                            {!props.isCheckbox ?
+                            {!props.isCheckbox ? (
                                 <textarea
                                     value={editedContent}
                                     onChange={(e) => setEditedContent(e.target.value)}
                                     style={{ backgroundColor }}
                                 />
-                                :
+                            ) : (
                                 <div>
                                     {editedChecklist.map((item, index) => (
                                         <div
@@ -103,20 +117,22 @@ const Note = (props) => {
                                                 value={item.text}
                                                 onChange={(e) => handleChecklistChange(index, e)}
                                                 onKeyPress={(e) => handleKeyPress(e, index)}
-                                                placeholder={`Item ${index + 1}`}
+                                                placeholder="Add item..."
                                                 style={{
                                                     marginLeft: "8px",
                                                     fontWeight: "normal",
                                                     textDecoration: item.checked
                                                         ? "line-through"
                                                         : "none",
+                                                    fontSize: "14px"
                                                 }}
                                             />
                                         </div>
                                     ))}
-                                </div>}
+                                </div>
+                            )}
                             <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                <button className="btn save-btn" onClick={handleSave}>
+                                <button className="btn save-btn" type="submit">
                                     Save
                                 </button>
                                 <Tooltip title="Pick a background color" arrow>
@@ -170,7 +186,7 @@ const Note = (props) => {
                             </div>
                         </div>
                     )}
-                </div>
+                </form>
             </div>
         </Draggable>
     );

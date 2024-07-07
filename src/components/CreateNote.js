@@ -9,7 +9,7 @@ const CreateNote = (props) => {
     const [note, setNote] = useState({
         title: "",
         content: "",
-        backgroundColor: "#fff",
+        backgroundColor: "#ffffff",
         isCheckbox: false,
         checklist: []
     });
@@ -24,12 +24,12 @@ const CreateNote = (props) => {
 
     const addEvent = () => {
         props.passNote({
-            ...note, // Pass all properties of 'note'
+            ...note,
         });
         setNote({
             title: "",
             content: "",
-            backgroundColor: "#fff",
+            backgroundColor: "#ffffff",
             isCheckbox: false,
             checklist: []
         });
@@ -70,21 +70,9 @@ const CreateNote = (props) => {
 
     const handleCheckboxChange = (index) => {
         const newChecklist = [...note.checklist];
-        // Toggle the checked state
         newChecklist[index].checked = !newChecklist[index].checked;
-        
-        // If checked, move the item to the end of the array
-        if (newChecklist[index].checked) {
-            const checkedItem = newChecklist.splice(index, 1)[0];
-            newChecklist.push(checkedItem);
-        }
-    
-        setNote((prevData) => ({
-            ...prevData,
-            checklist: newChecklist
-        }));
+        reorderChecklist(newChecklist);
     };
-    
 
     const addChecklistItem = () => {
         setNote((prevData) => ({
@@ -98,6 +86,16 @@ const CreateNote = (props) => {
             event.preventDefault();
             addChecklistItem();
         }
+    };
+
+    const reorderChecklist = (checklist) => {
+        const newChecklist = [...checklist];
+        const checkedItems = newChecklist.filter(item => item.checked);
+        const uncheckedItems = newChecklist.filter(item => !item.checked);
+        setNote((prevData) => ({
+            ...prevData,
+            checklist: [...uncheckedItems, ...checkedItems]
+        }));
     };
 
     return (
@@ -128,12 +126,13 @@ const CreateNote = (props) => {
                                     value={item.text}
                                     onChange={(e) => handleChecklistChange(index, e)}
                                     onKeyPress={handleKeyPress}
-                                    placeholder={`Item ${index + 1}`}
+                                    placeholder="Add item..."
                                     style={{
                                         textDecoration: item.checked ? "line-through" : "none",
                                         marginLeft: "8px",
                                         flex: 1,
-                                        fontWeight: "normal"
+                                        fontWeight: "normal",
+                                        fontSize: "14px"
                                     }}
                                 />
                             </div>
@@ -177,7 +176,5 @@ const CreateNote = (props) => {
         </div>
     );
 };
-
-
 
 export default CreateNote;
